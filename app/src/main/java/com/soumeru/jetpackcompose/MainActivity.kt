@@ -13,6 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -31,6 +33,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
 
@@ -38,7 +41,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            TextViewWithFont()
+            ColorBox()
         }
     }
 }
@@ -173,8 +176,38 @@ fun TextViewWithFont() {
     }
 }
 
+@Composable
+fun ColorBox() {
+    val color = remember {
+        mutableStateOf(Color.Magenta)
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier
+            .background(Color.Red)
+            .weight(1f)
+            .fillMaxSize()
+            .clickable {
+                color.value = Color(
+                    Random.nextFloat(),
+                    Random.nextFloat(),
+                    Random.nextFloat(),
+                    1f
+                )
+            }) {
+        }
+
+        Box(modifier = Modifier
+            .background(color.value)
+            .weight(1f)
+            .fillMaxSize()) {
+        }
+
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultView() {
-    TextViewWithFont()
+    ColorBox()
 }
