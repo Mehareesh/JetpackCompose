@@ -6,10 +6,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -42,7 +43,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            ShowEditTextView()
+            ListViewInCompose()
         }
     }
 }
@@ -251,8 +252,31 @@ fun ShowEditTextView() {
     }
 }
 
+@Composable
+fun ListViewInCompose() {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center
+    ) {
+        itemsIndexed(
+            listOf("A", "N", "D", "R", "O", "I", "D", " ", "J", "E", "T", "P", "A", "C", "K", " ",
+                "C", "O", "M", "P", "O", "S", "E")
+        ) { index, string ->
+            Text(
+                text = string,
+                textAlign = TextAlign.Center,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultView() {
-    ShowEditTextView()
+    ListViewInCompose()
 }
