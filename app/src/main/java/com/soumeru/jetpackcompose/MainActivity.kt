@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -21,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -34,6 +34,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ChainStyle
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -43,7 +47,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            ListViewInCompose()
+            ConstraintLayoutView()
         }
     }
 }
@@ -259,8 +263,10 @@ fun ListViewInCompose() {
         verticalArrangement = Arrangement.Center
     ) {
         itemsIndexed(
-            listOf("A", "N", "D", "R", "O", "I", "D", " ", "J", "E", "T", "P", "A", "C", "K", " ",
-                "C", "O", "M", "P", "O", "S", "E")
+            listOf(
+                "A", "N", "D", "R", "O", "I", "D", " ", "J", "E", "T", "P", "A", "C", "K", " ",
+                "C", "O", "M", "P", "O", "S", "E"
+            )
         ) { index, string ->
             Text(
                 text = string,
@@ -275,8 +281,55 @@ fun ListViewInCompose() {
     }
 }
 
+@Composable
+fun ConstraintLayoutView() {
+    val constraints = ConstraintSet {
+        val greenBox = createRefFor("greenBox")
+        val redBox = createRefFor("redBox")
+        val guidLineA = createGuidelineFromTop(0.5f)
+        val guidLineB = createGuidelineFromTop(0.25f)
+
+        constrain(greenBox) {
+            top.linkTo(guidLineA)
+            start.linkTo(parent.start)
+            width = Dimension.value(100.dp)
+            height = Dimension.value(100.dp)
+        }
+
+        constrain(redBox) {
+            top.linkTo(guidLineB)
+            start.linkTo(greenBox.end)
+            end.linkTo(parent.end)
+            width = Dimension.value(100.dp)
+            height = Dimension.value(100.dp)
+        }
+
+        createHorizontalChain(greenBox, redBox, chainStyle = ChainStyle.Packed)
+    }
+
+    ConstraintLayout(
+        constraintSet = constraints,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Green)
+                .layoutId("greenBox")
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Red)
+                .layoutId("redBox")
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultView() {
-    ListViewInCompose()
+    ConstraintLayoutView()
 }
