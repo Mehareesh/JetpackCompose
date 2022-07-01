@@ -44,6 +44,7 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import com.soumeru.jetpackcompose.animation.ShowMusicKnob
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            CircularAnimatedProgressBar()
+            ShowMusicKnob(imageKnob = R.drawable.music_knob)
         }
     }
 }
@@ -393,5 +394,5 @@ fun CircularAnimatedProgressBar() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultView() {
-    CircularAnimatedProgressBar()
+    ShowMusicKnob(imageKnob = R.drawable.music_knob)
 }
